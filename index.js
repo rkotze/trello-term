@@ -11,7 +11,7 @@ const chTrello = chalk.bgHex('#026AA7').hex('#fff');
 const chCard = chalk.bgWhite.black;
 const chLink = chalk.hex('#026AA7');
 const chList = chalk.gray;
-const error = chalk.bold.red;
+const chError = chalk.bold.red;
 
 const { TRELLO_API_KEY, TRELLO_API_TOKEN } = process.env;
 
