@@ -4,14 +4,22 @@ const [username, idBoard] = args;
 
 const { TRELLO_API_KEY, TRELLO_API_TOKEN } = process.env;
 
-https://api.trello.com/1/boards/590ae5512bc2087d623b4bc5/cards/open?fields=id,name,shortUrl,url&lists=true&members=true
-var options = {
+var openCardsOnBoard = {
     method: 'GET',
     url: 'https://api.trello.com/1/boards/' + idBoard + '/cards/open',
     qs: {
-        fields: 'id,name,shortUrl,url',
-        lists: true,
+        fields: 'id,name,shortUrl,url,idList',
         members: true,
+        key: TRELLO_API_KEY,
+        token: TRELLO_API_TOKEN
+    }
+};
+
+var listsOnBoard = {
+    method: 'GET',
+    url: 'https://api.trello.com/1/boards/' + idBoard + '/lists',
+    qs: {
+        fields: 'id,name',
         key: TRELLO_API_KEY,
         token: TRELLO_API_TOKEN
     }
@@ -27,15 +35,27 @@ if (TRELLO_API_KEY && !TRELLO_API_TOKEN) {
     process.exit(1);
 }
 
-request(options, function (error, response, body) {
+request(listsOnBoard, function (error, response, body) {
     if (error) throw new Error(error);
 
-    const cardList = JSON.parse(body);
-    const userCards = cardList.filter((card) => {
-        return card.members.length > 0 && card.members.some((member) => (member.username === username));
-    });
+    const listsOfLists = JSON.parse(body);
 
-    userCards.forEach(function (card, i) {
-        console.log(`${i + 1}. ${card.name} ${card.shortUrl}`);
+    request(openCardsOnBoard, function (error, response, body) {
+        if (error) throw new Error(error);
+
+        const cardList = JSON.parse(body);
+        const userCards = cardList.filter((card) => {
+            return card.members.length > 0 && card.members.some((member) => (member.username === username));
+        });
+
+        listsOfLists.forEach(function(list){
+            console.log(list.name);
+            userCards.forEach(function (card) {
+                if(card.idList === list.id){
+                    console.log(`-> ${card.name} ${card.shortUrl}`);
+                }
+            });
+        });
+
     });
 });
