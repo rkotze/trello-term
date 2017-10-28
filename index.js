@@ -44,7 +44,7 @@ if (!TRELLO_API_KEY) {
 }
 
 if (TRELLO_API_KEY && !TRELLO_API_TOKEN) {
-    log(chError('You need a Trello token. Get one here: https://trello.com/1/authorize?expiration=never&scope=read,write,account&response_type=token&name=Server%20Token&key=' + TRELLO_API_KEY));
+    log(chError('You need a Trello token. Get one here: https://trello.com/1/authorize?expiration=never&scope=read,write,account&response_type=token&name=Trello%20Terminal&key=' + TRELLO_API_KEY));
     process.exit(1);
 }
 

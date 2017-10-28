@@ -4,7 +4,9 @@ Simple terminal app to check trello cards assigned to you.
 
 ## Commands
 
-`npm start <username> <board ID>`
+`npm start <username> <boardID>`
+
+Where can I find `boardID`? In the Trello url: https://trello.com/b/`boardID`/board-name
 
 ## Setup
 
@@ -18,7 +20,7 @@ Need trello key and token and assigned to respective environment variables:
 
 `TRELLO_API_KEY`, get here: https://trello.com/app-key
 
-`TRELLO_API_TOKEN`, get here: https://trello.com/1/authorize?expiration=never&scope=read,write,account&response_type=token&name=Server%20Token&key=`TRELLO_API_KEY`
+`TRELLO_API_TOKEN`, get here: https://trello.com/1/authorize?expiration=never&scope=read,write,account&response_type=token&name=Trello%20Terminal&key=`TRELLO_API_KEY`
 
 ## MVP goal
 
