@@ -2,6 +2,10 @@
 
 Simple terminal app to check trello cards assigned to you.
 
+## Commands
+
+`npm start <username> <board ID>`
+
 ## Setup
 
 ### Dev
