@@ -4,12 +4,11 @@ const chalk = require('chalk');
 const log = console.log;
 
 const args = process.argv.slice(2)
-const [username, idBoard] = args;
+const [username, idBoard, codePrefix] = args;
 
 // Themes:
 const chTrello = chalk.bgHex('#026AA7').hex('#fff');
-const chCard = chalk.bgWhite.black;
-const chLink = chalk.hex('#026AA7');
+const chCard = chalk.cyan;
 const chList = chalk.gray;
 const chError = chalk.bold.red;
 
@@ -66,8 +65,11 @@ request(listsOnBoard, function (error, response, body) {
             let cardsToList = 0;
             userCards.forEach(function (card) {
                 if(card.idList === list.id){
-                    if(cardsToList === 0) log(chList(' ' + list.name));
-                    log('   ' + chCard(` ${card.name} `) + ' ' + chLink(card.shortUrl));
+                    if(cardsToList === 0) log(chList(' LIST  ' + list.name));
+
+                    const cardCode = codePrefix + card.url.match(/\/(\d+)-/)[1] + ' ';
+                    log(chCard(`  CARD  ${card.name} `));
+                    log('         ' + cardCode + ' ' + card.shortUrl);
                     cardsToList++;
                 }
             });
