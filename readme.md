@@ -2,26 +2,39 @@
 
 Simple terminal app to check trello cards assigned to you on a board.
 
-`npm install ttrello -g`
+~~`npm install ttrello -g`~~ still to be published
 
 ## Commands
 
-`ttrello mycards|mc <username> <idBoard> [codePrefix]`
+Terminal help `ttrello -h` or for commands `ttrello mycards -h`.
 
-**Where** can I find `idBoard`? In the Trello url: https://trello.com/b/`idBoard`/board-name
+`ttrello mycards|mc [options] <username> <idBoard> [codePrefix]`
+
+Example:
+
+```
+$ ttrello mycards someUsername j800nsixa CARDID
+LIST list name
+ CARD card title
+      CARDID123 shortUrl
+```
+
+**Where** can I find `idBoard`? In the Trello url: https://trello.com/b/**idBoard**/board-name
 
 ## Dev setup
 
 1. `git clone ...`
 1. `npm i`
 1. Run app: `npm start`
-1. try shell command: `npm link` -> now `ttrello` is available.
+1. Try shell command: `npm link` -> now `ttrello` is available.
 
-Need trello key and token and assigned to respective environment variables:
+Trello key and token and required to access boards. 
 
-`TRELLO_API_KEY`, get here: https://trello.com/app-key
+Environment variables:
 
-`TRELLO_API_TOKEN`, get here: https://trello.com/1/authorize?expiration=never&scope=read,write,account&response_type=token&name=Trello%20Terminal&key=`TRELLO_API_KEY`
+`TRELLO_API_KEY` = get here: https://trello.com/app-key
+
+`TRELLO_API_TOKEN` = get here: https://trello.com/1/authorize?expiration=never&scope=read,write,account&response_type=token&name=Trello%20Terminal&key=`TRELLO_API_KEY`
 
 ## MVP goal
 

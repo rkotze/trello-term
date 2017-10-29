@@ -14,6 +14,7 @@ program
   .command('mycards <username> <idBoard> [codePrefix]')
   .alias('mc')
   .description('Find your codes in a board')
+  .option('-f, --listfilter <name>', 'Filter by list name')
   .action(yourCards);
 
 program.parse(process.argv);
@@ -26,7 +27,7 @@ const chError = chalk.bold.red;
 
 log(chTrello(' Trello Terminal '));
 
-function yourCards(username, idBoard, codePrefix = '') {
+function yourCards(username, idBoard, codePrefix = '', option) {
   const { TRELLO_API_KEY, TRELLO_API_TOKEN } = process.env;
   if (!TRELLO_API_KEY) {
     log(chError('You need a Trello API KEY. Get one here: https://trello.com/app-key'));
@@ -37,7 +38,7 @@ function yourCards(username, idBoard, codePrefix = '') {
     log(chError('You need a Trello token. Get one here: https://trello.com/1/authorize?expiration=never&scope=read,write,account&response_type=token&name=Trello%20Terminal&key=' + TRELLO_API_KEY));
     process.exit(1);
   }
-  var openCardsOnBoard = {
+  const openCardsOnBoard = {
     method: 'GET',
     url: 'https://api.trello.com/1/boards/' + idBoard + '/cards/open',
     qs: {
@@ -48,7 +49,7 @@ function yourCards(username, idBoard, codePrefix = '') {
     }
   };
   
-  var listsOnBoard = {
+  const listsOnBoard = {
     method: 'GET',
     url: 'https://api.trello.com/1/boards/' + idBoard + '/lists',
     qs: {
@@ -57,6 +58,8 @@ function yourCards(username, idBoard, codePrefix = '') {
       token: TRELLO_API_TOKEN
     }
   };
+
+  const listFilter = option.listfilter;
 
   request(listsOnBoard, function (error, response, body) {
     if (error) throw new Error(error);
@@ -75,7 +78,7 @@ function yourCards(username, idBoard, codePrefix = '') {
       listsOfLists.forEach(function (list) {
         let cardsToList = 0;
         userCards.forEach(function (card) {
-          if (card.idList === list.id) {
+          if (card.idList === list.id && whenListFilter(list.name, listFilter)) {
             if (cardsToList === 0) log(chList(' LIST  ' + list.name));
 
             const cardCode = codePrefix + card.url.match(/\/(\d+)-/)[1] + ' ';
@@ -87,4 +90,10 @@ function yourCards(username, idBoard, codePrefix = '') {
       });
     });
   });
+}
+
+function whenListFilter(listName, filter) {
+  if(typeof filter === 'undefined') return true;
+
+  return new RegExp(filter, 'i').test(listName);
 }
