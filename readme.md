@@ -4,7 +4,7 @@ Simple terminal app to check trello cards assigned to you.
 
 ## Commands
 
-`ttrello <username> <boardID>`
+`ttrello mycards <username> <boardID>`
 
 Where can I find `boardID`? In the Trello url: https://trello.com/b/`boardID`/board-name
 
