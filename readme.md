@@ -1,20 +1,21 @@
 # Trello term
 
-Simple terminal app to check trello cards assigned to you.
+Simple terminal app to check trello cards assigned to you on a board.
+
+`npm install ttrello -g`
 
 ## Commands
 
-`ttrello mycards <username> <boardID>`
+`ttrello mycards|mc <username> <idBoard> [codePrefix]`
 
-Where can I find `boardID`? In the Trello url: https://trello.com/b/`boardID`/board-name
+**Where** can I find `idBoard`? In the Trello url: https://trello.com/b/`idBoard`/board-name
 
-## Setup
-
-### Dev
+## Dev setup
 
 1. `git clone ...`
 1. `npm i`
 1. Run app: `npm start`
+1. try shell command: `npm link` -> now `ttrello` is available.
 
 Need trello key and token and assigned to respective environment variables:
 
