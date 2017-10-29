@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const request = require('request');
 const chalk = require('chalk');
 
@@ -49,7 +51,7 @@ if (TRELLO_API_KEY && !TRELLO_API_TOKEN) {
 
 request(listsOnBoard, function (error, response, body) {
     if (error) throw new Error(error);
-    log(chTrello(' > Your cards '));
+    log(chTrello(' Your cards '));
 
     const listsOfLists = JSON.parse(body);
 
