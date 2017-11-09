@@ -1,5 +1,6 @@
 
 const request = require('request');
+const { openCardsOnBoard } = require('./buildQuery');
 
 const { chTrello, chCard, chList, chError } = require('./terminalThemes');
 const log = console.log;
@@ -17,16 +18,10 @@ module.exports.getUserBoardCards = function getUserBoardCards(username, idBoard,
       process.exit(1);
     }
   
-    const openCardsOnBoard = {
-      method: 'GET',
-      url: 'https://api.trello.com/1/boards/' + idBoard + '/cards/open',
-      qs: {
-        fields: 'id,name,shortUrl,url,idList',
-        members: true,
-        key: TRELLO_API_KEY,
-        token: TRELLO_API_TOKEN
-      }
-    };
+    const openCardsOnBoardQ = openCardsOnBoard({
+      idBoard: idBoard,
+      fields: 'id,name,shortUrl,url,idList'
+    });
     
     const listsOnBoard = {
       method: 'GET',
@@ -46,7 +41,7 @@ module.exports.getUserBoardCards = function getUserBoardCards(username, idBoard,
   
       const listsOfLists = JSON.parse(body);
   
-      request(openCardsOnBoard, function (error, response, body) {
+      request(openCardsOnBoardQ, function (error, response, body) {
         if (error) throw new Error(error);
   
         const cardList = JSON.parse(body);
