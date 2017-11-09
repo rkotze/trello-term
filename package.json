@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node ./index.js",
     "test": "jest",
-    "wtest": "jest --watch"
+    "wtest": "set TEST=true && jest --watch"
   },
   "bin": "./index.js",
   "keywords": [],
@@ -16,6 +16,7 @@
   "dependencies": {
     "chalk": "^2.3.0",
     "commander": "^2.11.0",
+    "joinable": "^1.5.0",
     "request": "^2.83.0"
   },
   "devDependencies": {
