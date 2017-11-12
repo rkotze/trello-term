@@ -1,4 +1,4 @@
-const { baseQuery, openCardsOnBoard } = require('./buildQuery');
+const { baseQuery, openCardsOnBoard, listsOnBoard } = require('./buildQuery');
 
 describe('Building queries', () => {
     it('base query with trello api and method', () => {
@@ -29,7 +29,7 @@ describe('Building queries', () => {
             idBoard: 'ysekw',
             fields: 'id,name,shortUrl,url,idList'
         }, 
-            { key: '12', token: '45' });
+        { key: '12', token: '45' });
 
         expect(actual).toEqual({
             method: 'GET',
@@ -37,6 +37,24 @@ describe('Building queries', () => {
             qs: {
               fields: 'id,name,shortUrl,url,idList',
               members: true,
+              key: '12',
+              token: '45'
+            }
+        });
+    });
+
+    it('lists on a board', () => {
+        const actual = listsOnBoard({
+            idBoard: 'ysekw',
+            fields: 'id,name'
+        }, 
+        { key: '12', token: '45' });
+
+        expect(actual).toEqual({
+            method: 'GET',
+            url: 'https://api.trello.com/1/boards/ysekw/lists',
+            qs: {
+              fields: 'id,name',
               key: '12',
               token: '45'
             }

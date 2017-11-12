@@ -32,7 +32,17 @@ function openCardsOnBoard(query, authObject){
     return baseQuery(newQuery, authObject);
 };
 
+function listsOnBoard(query, authObject){
+    let newQuery = {
+        url: joinable(BASE_URI, 'boards', query.idBoard, 'lists', { separator: '/' }),
+        qs: {
+            fields: query.fields
+        }
+    };
+    return baseQuery(newQuery, authObject);
+};
 module.exports = {
     baseQuery,
-    openCardsOnBoard
+    openCardsOnBoard,
+    listsOnBoard
 };
