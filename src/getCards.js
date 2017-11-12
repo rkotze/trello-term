@@ -1,6 +1,6 @@
 
 const request = require('request');
-const { openCardsOnBoard } = require('./buildQuery');
+const { openCardsOnBoard, listsOnBoard } = require('./buildQuery');
 
 const { chTrello, chCard, chList, chError } = require('./terminalThemes');
 const log = console.log;
@@ -23,19 +23,14 @@ module.exports.getUserBoardCards = function getUserBoardCards(username, idBoard,
       fields: 'id,name,shortUrl,url,idList'
     });
     
-    const listsOnBoard = {
-      method: 'GET',
-      url: 'https://api.trello.com/1/boards/' + idBoard + '/lists',
-      qs: {
-        fields: 'id,name',
-        key: TRELLO_API_KEY,
-        token: TRELLO_API_TOKEN
-      }
-    };
-  
+    const listsOnBoardQ = listsOnBoard({
+      idBoard: idBoard,
+      fields: 'id,name'
+    }); 
+      
     const listFilter = option.listfilter;
   
-    request(listsOnBoard, function (error, response, body) {
+    request(listsOnBoardQ, function (error, response, body) {
       if (error) throw new Error(error);
       log(chTrello(' Your cards '));
   
