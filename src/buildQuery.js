@@ -1,50 +1,57 @@
-const { joinStrings, joinObject } = require('joinable');
-const BASE_URI = 'https://api.trello.com/1';
+const { joinStrings, joinObject } = require("joinable");
+const BASE_URI = "https://api.trello.com/1";
 const { TRELLO_API_KEY, TRELLO_API_TOKEN, TEST } = process.env;
 
-function baseQuery(query, authObject){
-    let newQuery = Object.assign({
-        method: 'GET',
-        url: BASE_URI,
-        qs: {}
-    }, query);
+function baseQuery(query, authObject) {
+  let newQuery = Object.assign(
+    {
+      method: "GET",
+      url: BASE_URI,
+      qs: {}
+    },
+    query
+  );
 
-    let keyToken = authObject;
-    if(!TEST){
-        keyToken = {
-            key: TRELLO_API_KEY,
-            token: TRELLO_API_TOKEN
-        };
+  let keyToken = authObject;
+  if (!TEST) {
+    keyToken = {
+      key: TRELLO_API_KEY,
+      token: TRELLO_API_TOKEN
+    };
+  }
+
+  newQuery.qs = Object.assign(newQuery.qs, keyToken);
+  const qs = joinObject(newQuery.qs);
+  newQuery.url = joinStrings(newQuery.url, [qs, "?"], qs, { separator: "" });
+  return newQuery;
+}
+
+function openCardsOnBoard(query, authObject) {
+  let newQuery = {
+    url: joinStrings(BASE_URI, "boards", query.idBoard, "cards", "open", {
+      separator: "/"
+    }),
+    qs: {
+      fields: query.fields,
+      members: "true"
     }
+  };
+  return baseQuery(newQuery, authObject);
+}
 
-    newQuery.qs = Object.assign(newQuery.qs, keyToken);
-    const qs = joinObject(newQuery.qs);
-    newQuery.url = joinStrings(newQuery.url, [qs, '?'], qs, { separator: '' });
-    return newQuery;
-};
-
-function openCardsOnBoard(query, authObject){
-    let newQuery = {
-        url: joinStrings(BASE_URI, 'boards', query.idBoard, 'cards', 'open', { separator: '/' }),
-        qs: {
-            fields: query.fields,
-            members: 'true'
-        }
-    };
-    return baseQuery(newQuery, authObject);
-};
-
-function listsOnBoard(query, authObject){
-    let newQuery = {
-        url: joinStrings(BASE_URI, 'boards', query.idBoard, 'lists', { separator: '/' }),
-        qs: {
-            fields: query.fields
-        }
-    };
-    return baseQuery(newQuery, authObject);
-};
+function listsOnBoard(query, authObject) {
+  let newQuery = {
+    url: joinStrings(BASE_URI, "boards", query.idBoard, "lists", {
+      separator: "/"
+    }),
+    qs: {
+      fields: query.fields
+    }
+  };
+  return baseQuery(newQuery, authObject);
+}
 module.exports = {
-    baseQuery,
-    openCardsOnBoard,
-    listsOnBoard
+  baseQuery,
+  openCardsOnBoard,
+  listsOnBoard
 };
