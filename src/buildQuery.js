@@ -1,4 +1,4 @@
-const joinable = require('joinable').joinStrings;
+const { joinStrings, joinObject } = require('joinable');
 const BASE_URI = 'https://api.trello.com/1';
 const { TRELLO_API_KEY, TRELLO_API_TOKEN, TEST } = process.env;
 
@@ -18,15 +18,17 @@ function baseQuery(query, authObject){
     }
 
     newQuery.qs = Object.assign(newQuery.qs, keyToken);
+    const qs = joinObject(newQuery.qs);
+    newQuery.url = joinStrings(newQuery.url, [qs, '?'], qs, { separator: '' });
     return newQuery;
 };
 
 function openCardsOnBoard(query, authObject){
     let newQuery = {
-        url: joinable(BASE_URI, 'boards', query.idBoard, 'cards', 'open', { separator: '/' }),
+        url: joinStrings(BASE_URI, 'boards', query.idBoard, 'cards', 'open', { separator: '/' }),
         qs: {
             fields: query.fields,
-            members: true
+            members: 'true'
         }
     };
     return baseQuery(newQuery, authObject);
@@ -34,7 +36,7 @@ function openCardsOnBoard(query, authObject){
 
 function listsOnBoard(query, authObject){
     let newQuery = {
-        url: joinable(BASE_URI, 'boards', query.idBoard, 'lists', { separator: '/' }),
+        url: joinStrings(BASE_URI, 'boards', query.idBoard, 'lists', { separator: '/' }),
         qs: {
             fields: query.fields
         }

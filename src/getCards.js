@@ -1,5 +1,6 @@
 
 const request = require('request');
+const fetch = require('node-fetch');
 const { openCardsOnBoard, listsOnBoard } = require('./buildQuery');
 
 const { chTrello, chCard, chList, chError } = require('./terminalThemes');
@@ -30,12 +31,13 @@ module.exports.getUserBoardCards = function getUserBoardCards(username, idBoard,
     
   const listFilter = option.listfilter;
 
-  flow
-  .request(listsOnBoardQ)
-  .request(openCardsOnBoardQ)
-  .then(function (listsOfLists, cardList) {
+  Promise.all([
+    queryToJson(listsOnBoardQ.url),
+    queryToJson(openCardsOnBoardQ.url),
+  ]).then((cardsAndLists) => {
+    const [listsOfLists, cardList] = cardsAndLists;
     log(chTrello(' Your cards '));
-
+    
     const userCards = cardList.filter((card) => {
       return card.members.length > 0 && card.members.some((member) => (member.username === username));
     });
@@ -62,30 +64,9 @@ function whenListFilter(listName, filter) {
     return new RegExp(filter, 'i').test(listName);
 }
 
-const flow = {
-  store: [],
-  requestCount: 0,
-  callThen: function(){},
-  request: function(query){
-    this.requestCount++;
-    request(query, (error, response, body) => {
-      if (error) throw new Error(error);
-      
-      this.store.push(JSON.parse(body));
-      this.callThen();
-    });
+async function queryToJson(queryUrl){
+  let json = await fetch(queryUrl)
+  .then((data)=> data.json());
 
-    return this;
-  },
-
-  then: function(cb) {
-    this.callThen = () => {
-      if(this.store.length === this.requestCount){
-        cb(...this.store);
-        this.store = [];
-        this.requestCount = 0;
-      }
-    }
-    return this;
-  }
+  return json;
 }

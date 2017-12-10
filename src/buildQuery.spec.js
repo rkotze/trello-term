@@ -6,9 +6,7 @@ describe('Building queries', () => {
         expect(actual).toEqual({
             method: 'GET',
             url: 'https://api.trello.com/1',
-            qs: {
-
-            }
+            qs: {}
         });
     });
 
@@ -16,7 +14,7 @@ describe('Building queries', () => {
         const actual = baseQuery({}, { key: '12', token: '45' });
         expect(actual).toEqual({
             method: 'GET',
-            url: 'https://api.trello.com/1',
+            url: 'https://api.trello.com/1?key=12&token=45',
             qs: {
                 key: '12', 
                 token: '45' 
@@ -33,10 +31,14 @@ describe('Building queries', () => {
 
         expect(actual).toEqual({
             method: 'GET',
-            url: 'https://api.trello.com/1/boards/ysekw/cards/open',
+            url: ['https://api.trello.com/1/boards/ysekw/cards/open',
+                '?fields=id,name,shortUrl,url,idList&',
+                'members=true&',
+                'key=12&',
+                'token=45'].join(''),
             qs: {
               fields: 'id,name,shortUrl,url,idList',
-              members: true,
+              members: 'true',
               key: '12',
               token: '45'
             }
@@ -52,7 +54,10 @@ describe('Building queries', () => {
 
         expect(actual).toEqual({
             method: 'GET',
-            url: 'https://api.trello.com/1/boards/ysekw/lists',
+            url: ['https://api.trello.com/1/boards/ysekw/lists',
+                '?fields=id,name&',
+                'key=12&',
+                'token=45'].join(''),
             qs: {
               fields: 'id,name',
               key: '12',
