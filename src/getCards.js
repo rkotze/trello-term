@@ -1,5 +1,3 @@
-
-const request = require('request');
 const fetch = require('node-fetch');
 const { openCardsOnBoard, listsOnBoard } = require('./buildQuery');
 
